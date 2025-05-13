@@ -1,0 +1,49 @@
+#ifndef _PROJECTS_PROJECT1_AW_MESSAGE_H__
+#define _PROJECTS_PROJECT1_AW_MESSAGE_H__
+
+/**
+ * For easy to implement, combine robot and central control node message
+ * If you want to modify message structure, don't split it
+ */
+
+struct message {
+    //
+    // To central control node
+    //
+    /** current row of robot */
+    int row;
+    /** current column of robot */
+    int col;
+    /** current payload of robot */
+    int current_payload;
+    /** required paylod of robot */
+    int required_payload;
+
+    //
+    // To robots
+    //
+    /** next command for robot */
+    int command;
+};
+
+/** 
+ * Simple message box which can receive only one message from sender
+*/
+struct message_box {
+    /** check if the message was written by others */
+    int dirtyBit;
+    /** stored message */
+    struct message msg;
+};
+
+/** message boxes from central control node to each robot */
+extern struct message_box* boxes_from_central_control_node;
+/** message boxes from robots to central control node */
+extern struct message_box* boxes_from_robots;
+
+void message_boxes(int n);
+void message_from_robots(int idx, struct message_box* msg_box, int robot_row, int robot_col);
+void message_from_center(int idx, struct message_box* msg_box, int next_row, int next_col);
+
+
+#endif
